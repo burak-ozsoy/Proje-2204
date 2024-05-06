@@ -4,7 +4,7 @@ import time
 from threading import Thread
 
 # Constants
-BROADCAST_IP = '192.168.1.255'  # Adjust based on your local network configuration
+BROADCAST_IP = '192.168.1.101'  # Adjust based on your local network configuration
 BROADCAST_PORT = 6000
 
 def announce_service(username):
