@@ -42,3 +42,6 @@ def announce_service(username):
 if __name__ == "__main__":
     username = input("Enter your username: ")
     announce_service(username)
+
+
+    # gösterim amaçlı #
