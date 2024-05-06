@@ -1,18 +1,16 @@
-# peer_discovery.py
-
 import socket
 import json
 import time
 from threading import Thread
 
 # Constants
-BROADCAST_IP = '192.168.1.101'  # Adjust based on your local network configuration
+BROADCAST_IP = '192.168.1.255'  # Adjust based on your local network configuration
 BROADCAST_PORT = 6000
-
-# Global variable to store discovered peers
-discovered_peers = {}
+PEER_DATA_FILE = 'peer_data.json'  # File to store discovered peers
 
 def discover_peers():
+    discovered_peers = {}
+    
     # Setup UDP socket for receiving broadcasts
     udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     udp_socket.bind(('', BROADCAST_PORT))
@@ -32,15 +30,19 @@ def discover_peers():
                     username = message.get('username')
                     ip_address = addr[0]
                     
-                    # Store peer in global variable
-                    discovered_peers[ip_address] = username
-                    
                     # Update timestamp
-                    discovered_peers[ip_address] = time.time()
+                    discovered_peers[ip_address] = {
+                        'username': username,
+                        'timestamp': time.time()
+                    }
+                    
+                    # Save to file
+                    with open(PEER_DATA_FILE, 'w') as fp:
+                        json.dump(discovered_peers, fp)
                     
                     # Display detected user
                     print(f"Detected user: {username} is online")
-                
+                    print("Discovered peers:", discovered_peers)
                 except json.JSONDecodeError:
                     print("Error parsing JSON data")
                     
@@ -52,7 +54,7 @@ def discover_peers():
     # Start receiving broadcasts in a separate thread
     receive_thread = Thread(target=receive_broadcasts)
     receive_thread.start()
-
+    
     # Keep the main thread running
     while True:
         time.sleep(1)
