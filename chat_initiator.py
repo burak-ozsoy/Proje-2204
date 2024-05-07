@@ -18,7 +18,7 @@ def chat_with_user(username):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             with open(PEER_DATA_FILE, 'r') as fp:
                 discovered_peers = json.load(fp)
-                if username not in discovered_peers:
+                if username not in discovered_peers[username]:
                     print(f"{username} is not available.")
                     return
                 peer_ip = discovered_peers[username]['ip']
@@ -41,9 +41,9 @@ def log_message(action, username, message):
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: python chat_initiator.py <username>")
-        sys.exit(1)
+        # sys.exit(1)
     
-    username = sys.argv[1]
+    # username = sys.argv[1]
     display_available_users()
     target_username = input("Enter the username you want to chat with: ")
     chat_with_user(target_username)
