@@ -3,12 +3,12 @@ import json
 import time
 from threading import Thread
 
-# Constants
-BROADCAST_IP = '192.168.1.109'  # Adjust based on your local network configuration
+# Sabitler
+BROADCAST_IP = '192.168.1.255'  # Yayın yapılacak IP adresi, ağ yapılandırmasına göre ayarlanmalıdır
 BROADCAST_PORT = 6000
 
 def announce_service(username):
-    # Setup UDP socket for broadcasting
+    # Yayın yapmak için UDP soketi oluştur
     udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     udp_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
     
@@ -17,13 +17,13 @@ def announce_service(username):
     def send_broadcasts():
         while True:
             try:
-                # Construct JSON message
+                # JSON mesajını oluştur
                 message = json.dumps({'username': username})
                 
-                # Broadcast message
+                # Yayın mesajını gönder
                 udp_socket.sendto(message.encode(), (BROADCAST_IP, BROADCAST_PORT))
                 
-                # Sleep for 8 seconds before next broadcast
+                # Bir sonraki yayından önce 8 saniye bekleyin
                 time.sleep(8)
                 
             except KeyboardInterrupt:
@@ -31,15 +31,14 @@ def announce_service(username):
                 udp_socket.close()
                 break
     
-    # Start sending broadcasts in a separate thread
+    # Yayınları göndermek için ayrı bir iş parçacığında çalıştır
     send_thread = Thread(target=send_broadcasts)
     send_thread.start()
 
-    # Keep the main thread running
+    # Ana iş parçacığını çalışır durumda tut
     while True:
         time.sleep(1)
 
 if __name__ == "__main__":
     username = input("Enter your username: ")
     announce_service(username)
-

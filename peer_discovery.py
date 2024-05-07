@@ -3,15 +3,15 @@ import json
 import time
 from threading import Thread
 
-# Constants
-BROADCAST_IP = '192.168.1.255'  # Adjust based on your local network configuration
+# Sabitler
+BROADCAST_IP = '192.168.1.255'  # Yayın yapılacak IP adresi, ağ yapılandırmasına göre ayarlanmalıdır
 BROADCAST_PORT = 6000
-PEER_DATA_FILE = 'peer_data.json'  # File to store discovered peers
+PEER_DATA_FILE = 'peer_data.json'  # Keşfedilen kullanıcıların bilgilerinin saklandığı dosya
 
 def discover_peers():
     discovered_peers = {}
     
-    # Setup UDP socket for receiving broadcasts
+    # Yayınları dinlemek için UDP soketi oluştur
     udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     udp_socket.bind(('', BROADCAST_PORT))
     udp_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
@@ -21,26 +21,26 @@ def discover_peers():
     def receive_broadcasts():
         while True:
             try:
-                # Receive broadcast message
+                # Yayın mesajını al
                 data, addr = udp_socket.recvfrom(1024)
                 
-                # Parse JSON data
+                # JSON verisini ayrıştır
                 try:
                     message = json.loads(data)
                     username = message.get('username')
                     ip_address = addr[0]
                     
-                    # Update timestamp
+                    # Zaman damgasını güncelle
                     discovered_peers[ip_address] = {
                         'username': username,
                         'timestamp': time.time()
                     }
                     
-                    # Save to file
+                    # Dosyaya kaydet
                     with open(PEER_DATA_FILE, 'w') as fp:
                         json.dump(discovered_peers, fp)
                     
-                    # Display detected user
+                    # Alınan kullanıcıyı ekrana yazdır
                     print(f"Detected user: {username} is online")
                     print("Discovered peers:", discovered_peers)
                 except json.JSONDecodeError:
@@ -51,11 +51,11 @@ def discover_peers():
                 udp_socket.close()
                 break
     
-    # Start receiving broadcasts in a separate thread
+    # Yayınları almak için ayrı bir iş parçacığında çalıştır
     receive_thread = Thread(target=receive_broadcasts)
     receive_thread.start()
     
-    # Keep the main thread running
+    # Ana iş parçacığını çalışır durumda tut
     while True:
         time.sleep(1)
 
