@@ -4,8 +4,10 @@ import json
 import time
 import sys
 
-PEER_DATA_FILE = 'peer_data.json'  # File to store discovered peers
-CHAT_HISTORY_FILE = 'chat_history.log'  # File to store chat history
+HOSTNAME = socket.gethostname()
+BROADCAST_IP = socket.gethostbyname(HOSTNAME) 
+PEER_DATA_FILE = 'peer_data.json'
+CHAT_HISTORY_FILE = 'chat_history.log'
 
 def display_available_users():
     with open(PEER_DATA_FILE, 'r') as fp:
@@ -18,11 +20,10 @@ def chat_with_user(username):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             with open(PEER_DATA_FILE, 'r') as fp:
                 discovered_peers = json.load(fp)
-                if username not in discovered_peers[username]:
+                if username not in discovered_peers[BROADCAST_IP]['username']:
                     print(f"{username} is not available.")
                     return
-                peer_ip = discovered_peers[username]['ip']
-            s.connect((peer_ip, 6001))
+            s.connect((BROADCAST_IP, 6001))
             message = input("Enter your message: ")
             s.sendall(json.dumps({'message': message}).encode())
             print("Message sent successfully.")
@@ -41,9 +42,6 @@ def log_message(action, username, message):
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: python chat_initiator.py <username>")
-        # sys.exit(1)
-    
-    # username = sys.argv[1]
     display_available_users()
     target_username = input("Enter the username you want to chat with: ")
     chat_with_user(target_username)

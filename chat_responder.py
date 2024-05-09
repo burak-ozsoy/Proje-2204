@@ -3,7 +3,7 @@ import socket
 import json
 import time
 
-CHAT_HISTORY_FILE = 'chat_history.log'  # File to store chat history
+CHAT_HISTORY_FILE = 'chat_history.log'
 
 def respond_to_chat_request():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:

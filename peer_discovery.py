@@ -4,9 +4,10 @@ import time
 from threading import Thread
 
 # Sabitler
-BROADCAST_IP = '192.168.1.109'  # Yayın yapılacak IP adresi, ağ yapılandırmasına göre ayarlanmalıdır
+HOSTNAME = socket.gethostname()
+BROADCAST_IP = socket.gethostbyname(HOSTNAME) 
 BROADCAST_PORT = 6000
-PEER_DATA_FILE = 'peer_data.json'  # Keşfedilen kullanıcıların bilgilerinin saklandığı dosya
+PEER_DATA_FILE = 'peer_data.json'
 
 def discover_peers():
     discovered_peers = {}

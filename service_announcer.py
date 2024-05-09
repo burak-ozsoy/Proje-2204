@@ -4,7 +4,8 @@ import time
 from threading import Thread
 
 # Sabitler
-BROADCAST_IP = '192.168.1.109'  # Yayın yapılacak IP adresi, ağ yapılandırmasına göre ayarlanmalıdır
+HOSTNAME = socket.gethostname()
+BROADCAST_IP = socket.gethostbyname(HOSTNAME)  # Yayın yapılacak IP adresi, ağ yapılandırmasına göre ayarlanmalıdır
 BROADCAST_PORT = 6000
 
 def announce_service(username):
