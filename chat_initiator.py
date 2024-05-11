@@ -21,7 +21,7 @@ def display_available_users():
         discovered_peers = json.load(fp)
         print("Available Users:")
         for ip, peer_data in discovered_peers.items():
-            last_broadcast_time = datetime.fromtimestamp(peer_data['timestamp'])
+            last_broadcast_time = datetime.fromtimestamp(peer_data['timestamp']) # çevirmemiz gerekebilir!
             time_difference = current_time - last_broadcast_time
             if time_difference <= timedelta(minutes=15):
                 username = peer_data['username']
