@@ -33,7 +33,9 @@ def discover_peers():
                     
                     # Zaman damgasını güncelle
                     discovered_peers[ip_address] = {
-                        'username': username
+                        'ip':ip_address,
+                        'username': username,
+                        'timestamp': time.time()
                     }
                     
                     # Dosyaya kaydet

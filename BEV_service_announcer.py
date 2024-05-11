@@ -4,9 +4,9 @@ import time
 from threading import Thread
 
 # Sabitler
-HOSTNAME = socket.gethostname()
-BROADCAST_IP = socket.gethostbyname(HOSTNAME)  # Yayın yapılacak IP adresi, ağ yapılandırmasına göre ayarlanmalıdır
-# BROADCAST_IP = "127.0.0.1"
+# HOSTNAME = socket.gethostname()
+# BROADCAST_IP = socket.gethostbyname(HOSTNAME)  # Yayın yapılacak IP adresi, ağ yapılandırmasına göre ayarlanmalıdır
+BROADCAST_IP = "127.0.0.1"
 BROADCAST_PORT = 6000
 
 
