@@ -1,6 +1,7 @@
 import socket
 import json
 import time
+from datetime import datetime, timedelta
 import sys
 
 HOSTNAME = socket.gethostname()
@@ -8,11 +9,24 @@ BROADCAST_IP = socket.gethostbyname(HOSTNAME)
 PEER_DATA_FILE = 'peer_data.json'
 CHAT_HISTORY_FILE = 'chat_history.log'
 
+# def display_available_users():
+#     with open(PEER_DATA_FILE, 'r') as fp:
+#         discovered_peers = json.load(fp)
+#         usernames = [peer_data['username'] for peer_data in discovered_peers.values()]
+#         print("Discovered usernames:", usernames)
+
 def display_available_users():
+    current_time = datetime.now()
     with open(PEER_DATA_FILE, 'r') as fp:
         discovered_peers = json.load(fp)
-        usernames = [peer_data['username'] for peer_data in discovered_peers.values()]
-        print("Discovered usernames:", usernames)
+        print("Available Users:")
+        for ip, peer_data in discovered_peers.items():
+            last_broadcast_time = datetime.fromtimestamp(peer_data['timestamp'])
+            time_difference = current_time - last_broadcast_time
+            if time_difference <= timedelta(minutes=15):
+                username = peer_data['username']
+                status = "Online" if time_difference <= timedelta(seconds=10) else "Away"
+                print(f"{username} ({status})")
 
 
 def chat_with_user(username):
