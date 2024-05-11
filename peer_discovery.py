@@ -33,6 +33,7 @@ def discover_peers():
                     
                     # Zaman damgasını güncelle
                     discovered_peers[ip_address] = {
+                        'ip':ip_address,
                         'username': username,
                         'timestamp': time.time()
                     }

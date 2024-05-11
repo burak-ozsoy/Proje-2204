@@ -1,18 +1,19 @@
-# chat_initiator.py
 import socket
 import json
 import time
 import sys
 
 HOSTNAME = socket.gethostname()
-BROADCAST_IP = socket.gethostbyname(HOSTNAME) 
+BROADCAST_IP = socket.gethostbyname(HOSTNAME)
 PEER_DATA_FILE = 'peer_data.json'
 CHAT_HISTORY_FILE = 'chat_history.log'
 
 def display_available_users():
     with open(PEER_DATA_FILE, 'r') as fp:
         discovered_peers = json.load(fp)
-        print("Discovered peers:", discovered_peers)
+        usernames = [peer_data['username'] for peer_data in discovered_peers.values()]
+        print("Discovered usernames:", usernames)
+
 
 def chat_with_user(username):
     print(f"Initiating chat with {username}...")
@@ -39,9 +40,29 @@ def log_message(action, username, message):
     with open(CHAT_HISTORY_FILE, 'a') as fp:
         fp.write(f"{timestamp} | {action} | {username} | {message}\n")
 
+def menu():
+    print("Select an option:")
+    print("1. View online users")
+    print("2. Initiate chat")
+    print("3. View chat history")
+    print("4. Exit")
+
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python chat_initiator.py <username>")
-    display_available_users()
-    target_username = input("Enter the username you want to chat with: ")
-    chat_with_user(target_username)
+    while True:
+        menu()
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            display_available_users()
+        elif choice == '2':
+            target_username = input("Enter the username you want to chat with: ")
+            chat_with_user(target_username)
+        elif choice == '3':
+            with open(CHAT_HISTORY_FILE, 'r') as fp:
+                print("Chat History:")
+                print(fp.read())
+        elif choice == '4':
+            print("Exiting...")
+            break
+        else:
+            print("Invalid choice. Please enter a valid option.")
