@@ -44,7 +44,9 @@ def discover_peers():
                     
                     # Alınan kullanıcıyı ekrana yazdır
                     print(f"Detected user: {username} is online")
-                    print("Discovered peers:", discovered_peers)
+                    print("Discovered peers:")
+                    for ip, peer_info in discovered_peers.items():
+                        print(peer_info['username'])
                 except json.JSONDecodeError:
                     print("Error parsing JSON data")
                     
