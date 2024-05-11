@@ -3,7 +3,14 @@ import socket
 import json
 import time
 
+HOSTNAME = socket.gethostname()
+BROADCAST_IP = socket.gethostbyname(HOSTNAME)
+PEER_DATA_FILE = 'peer_data.json'
 CHAT_HISTORY_FILE = 'chat_history.log'
+
+with open(PEER_DATA_FILE, 'r') as fp:
+                discovered_peers = json.load(fp)
+username = discovered_peers[BROADCAST_IP]['username']
 
 def respond_to_chat_request():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -21,7 +28,7 @@ def respond_to_chat_request():
                 if 'message' in message:
                     received_message = message['message']
                     print(f"Received message: {received_message}")
-                    log_message("RECEIVED", addr[0], received_message)
+                    log_message("RECEIVED", username, received_message)
                 else:
                     print("Invalid message format.")
             time.sleep(1)
