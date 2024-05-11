@@ -46,7 +46,7 @@ def discover_peers():
                     print(f"Detected user: {username} is online")
                     print("Discovered peers:")
                     for ip, peer_info in discovered_peers.items():
-                        print(peer_info['username'])
+                        print("Username: " + peer_info['username'])
                 except json.JSONDecodeError:
                     print("Error parsing JSON data")
                     
