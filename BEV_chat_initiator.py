@@ -2,18 +2,17 @@ import socket
 import json
 import time
 from datetime import datetime, timedelta
-import sys
+from threading import Thread
+from pyDes import *
 
 HOSTNAME = socket.gethostname()
 BROADCAST_IP = socket.gethostbyname(HOSTNAME)
 PEER_DATA_FILE = 'peer_data.json'
 CHAT_HISTORY_FILE = 'chat_history.log'
 
-# def display_available_users():
-#     with open(PEER_DATA_FILE, 'r') as fp:
-#         discovered_peers = json.load(fp)
-#         usernames = [peer_data['username'] for peer_data in discovered_peers.values()]
-#         print("Discovered usernames:", usernames)
+# Diffie-Hellman sabitleri
+p = 23
+g = 5
 
 def display_available_users():
     current_time = datetime.now()
@@ -27,6 +26,35 @@ def display_available_users():
                 username = peer_data['username']
                 status = "Online" if time_difference <= timedelta(seconds=10) else "Away"
                 print(f"{username} ({status})")
+
+def initiate_secure_chat(target_username):
+    try:
+        with open(PEER_DATA_FILE, 'r') as fp:
+            discovered_peers = json.load(fp)
+            target_ip = discovered_peers[target_username]['ip']
+            secure = input("Would you like to chat securely? (yes/no): ").lower() == 'yes'
+            if secure:
+                print("Initiating secure chat...")
+                # Diffie-Hellman key exchange
+                your_random_number = int(input("Enter your random number: "))
+                your_key = (g ** your_random_number) % p
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    s.connect((target_ip, 6001))
+                    s.sendall(json.dumps({'key': your_key}).encode())
+                    data = s.recv(1024)
+                    their_key = json.loads(data.decode())['key']
+                    shared_key = (their_key ** your_random_number) % p
+                    print("Shared Key:", shared_key)
+                    # Now, proceed with encrypted chat
+            else:
+                print("Initiating unsecure chat...")
+                # Proceed with unencrypted chat
+    except KeyError:
+        print(f"{target_username} is not available.")
+    except ConnectionRefusedError:
+        print(f"Failed to connect to {target_username}.")
+    except Exception as e:
+        print(f"An error occurred: {e}")               
 
 
 def chat_with_user(username):
