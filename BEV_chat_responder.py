@@ -32,17 +32,21 @@ def respond_to_chat_request():
         print("Chat Responder is listening...")
         while True:
             conn, addr = s.accept()
+
             with conn:
                 print(f"Connected to {addr}")
                 data = conn.recv(1024)
                 if not data:
                     break
                 message = json.loads(data.decode())
+                
                 if 'key' in message:  # Diffie-Hellman key exchange
                     their_key = message['key']
                     shared_key = diffie_hellman_key_exchange(their_key)
-                    conn.sendall(json.dumps({'key': shared_key}).encode()) 
-                elif 'encrypted_message' in message:  # Güvenli mesaj alma
+                    conn.sendall(json.dumps({'key': shared_key}).encode())
+                    print(message)
+                    
+                if 'encrypted_message' in message:  # Güvenli mesaj alma
                     encrypted_message = message['encrypted_message']
                     decrypted_message = decrypt_message(encrypted_message)
                     print(f"Received encrypted message: {decrypted_message}")

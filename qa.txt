@@ -1,0 +1,1 @@
+1- initiator'da 2'yi seçtikten sonra olmayan bir kullanıcı girildiğinde "böyle bir kullanıcı yoktur" mesajı alıyor muyuz?
