@@ -41,7 +41,7 @@ def respond_to_chat_request():
                 if 'key' in message:  # Diffie-Hellman key exchange
                     their_key = message['key']
                     shared_key = diffie_hellman_key_exchange(their_key)
-                    conn.sendall(json.dumps({'key': shared_key}).encode())
+                    conn.sendall(json.dumps({'key': shared_key}).encode()) 
                 elif 'encrypted_message' in message:  # Güvenli mesaj alma
                     encrypted_message = message['encrypted_message']
                     decrypted_message = decrypt_message(encrypted_message)

@@ -31,7 +31,7 @@ def initiate_secure_chat(target_username):
     try:
         with open(PEER_DATA_FILE, 'r') as fp:
             discovered_peers = json.load(fp)
-            target_ip = discovered_peers[target_username]['ip']
+            target_ip = discovered_peers[BROADCAST_IP]['username']
             secure = input("Would you like to chat securely? (yes/no): ").lower() == 'yes'
             if secure:
                 print("Initiating secure chat...")
@@ -39,16 +39,22 @@ def initiate_secure_chat(target_username):
                 your_random_number = int(input("Enter your random number: "))
                 your_key = (g ** your_random_number) % p
                 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                    s.connect((target_ip, 6001))
+                    s.connect((BROADCAST_IP, 6001))
                     s.sendall(json.dumps({'key': your_key}).encode())
                     data = s.recv(1024)
                     their_key = json.loads(data.decode())['key']
                     shared_key = (their_key ** your_random_number) % p
                     print("Shared Key:", shared_key)
                     # Now, proceed with encrypted chat
+                    s.connect((BROADCAST_IP, 6001))
+                    message = input("Enter your message: ")
+                    s.sendall(json.dumps({'encrypted_message': message}).encode())
+                    print("Message sent successfully.")
+                    log_message("SENT (secure)", target_username, message)
             else:
                 print("Initiating unsecure chat...")
                 # Proceed with unencrypted chat
+                chat_with_user(target_username)
     except KeyError:
         print(f"{target_username} is not available.")
     except ConnectionRefusedError:
@@ -68,7 +74,7 @@ def chat_with_user(username):
                     return
             s.connect((BROADCAST_IP, 6001))
             message = input("Enter your message: ")
-            s.sendall(json.dumps({'message': message}).encode())
+            s.sendall(json.dumps({'unencrypted_message': message}).encode())
             print("Message sent successfully.")
             log_message("SENT", username, message)
     except ConnectionRefusedError:
@@ -98,7 +104,11 @@ if __name__ == "__main__":
             display_available_users()
         elif choice == '2':
             target_username = input("Enter the username you want to chat with: ")
-            chat_with_user(target_username)
+            secure_choice = input("Do you want to initiate a secure chat? (yes/no): ").lower()
+            if secure_choice == 'yes':
+                initiate_secure_chat(target_username)
+            else:
+                chat_with_user(target_username)
         elif choice == '3':
             with open(CHAT_HISTORY_FILE, 'r') as fp:
                 print("Chat History:")
