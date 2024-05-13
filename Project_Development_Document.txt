@@ -2,7 +2,7 @@
 
 Platform Used:
 
-The code for the networked peer-to-peer chat application was developed primarily on a Windows platform using Python 3.x.
+The code for the networked peer-to-peer chat application was developed collaboratively on a Windows platform using Python 3.x. We utilized a shared GitHub repository to manage our codebase and facilitate collaboration.
 
 Challenges Faced:
 
@@ -12,12 +12,15 @@ Thread Synchronization: Coordinating multiple threads for peer discovery, chat i
 
 Group Members and Workload Division:
 
+Workload division and decision-making were collaborative processes within the group. We regularly communicated and discussed various aspects of the project, including design choices, implementation strategies, and troubleshooting solutions. We used GitHub's issue tracking system to report and address any issues or challenges encountered during development. Each section of the code was developed through joint decision-making, where we collectively evaluated ideas, resolved challenges, and reached consensus on the best approaches.
+
+Progression and Problem-Solving
+
+Throughout the development process, we progressed iteratively by addressing tasks incrementally. We actively engaged in discussions, shared insights, and provided feedback to refine our solutions. Problem-solving was a collective effort, with each member contributing their expertise and brainstorming solutions to overcome challenges.
+
+Overall, our collaborative workflow enabled us to effectively coordinate our efforts, leverage each other's strengths, and iteratively improve the quality of our codebase.
 
 
-Collaboration:
 
-Communication: Regular meetings were held to discuss progress, share insights, and resolve any issues encountered during development.
-Code Review: Each team member reviewed and provided feedback on the code written by others to ensure consistency and quality.
-Testing: Comprehensive testing was conducted by each member individually and then collectively to ensure the application's functionality and stability.
 
-Overall, the collaborative efforts of the team facilitated the successful development of the networked peer-to-peer chat application, overcoming challenges and dividing workload efficiently.
+
