@@ -4,11 +4,13 @@ Platform Used:
 
 The code for the networked peer-to-peer chat application was developed collaboratively on a Windows platform using Python 3.x. We utilized a shared GitHub repository to manage our codebase and facilitate collaboration.
 
-Challenges Faced:
+General Challenges:
 
-Networking Setup: Configuring the network settings for local area network communication posed initial challenges, especially in handling broadcast messages.
-Encryption Implementation: Implementing secure communication with encryption using the Diffie-Hellman key exchange algorithm required understanding cryptographic concepts and libraries.
-Thread Synchronization: Coordinating multiple threads for peer discovery, chat initiation, and response required careful synchronization to avoid race conditions.
+- Cross-Platform Compatibility: Ensuring compatibility and consistent behavior across different operating systems, particularly regarding network configurations and file handling, required thorough testing and debugging.
+- Thread Synchronization: Coordinating concurrent processes and threads, especially in shared resource access and communication, posed challenges in ensuring thread safety and avoiding race conditions.
+- Error Handling and Debugging: Identifying and resolving various runtime errors, exceptions, and edge cases required comprehensive error handling strategies and systematic debugging approaches.
+
+The project's requirements presented a range of technical challenges, from network communication and encryption to user interface design and data management. Overcoming these challenges required collaborative problem-solving, diligent research, and iterative development. Despite the complexities, tackling these challenges provided valuable learning experiences and enhanced our understanding of networked application development.
 
 Group Members and Workload Division:
 
