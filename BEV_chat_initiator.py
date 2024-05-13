@@ -3,8 +3,6 @@ import json
 import time
 from datetime import datetime, timedelta
 from pyDes import *
-from cryptography.fernet import Fernet
-
 
 HOSTNAME = socket.gethostname()
 BROADCAST_IP = socket.gethostbyname(HOSTNAME)

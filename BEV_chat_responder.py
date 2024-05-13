@@ -1,7 +1,6 @@
 import socket
 import json
 import time
-from datetime import datetime, timedelta
 from pyDes import *
 
 HOSTNAME = socket.gethostname()
@@ -65,10 +64,6 @@ def respond_to_chat_request():
 
 # Mesajı şifrelemek için fonksiyon
 def encrypt_message(message, key):
-    # Burada mesajı şifrelemek için kullanılan şifreleme algoritmasını seçebilirsiniz.
-    # Bu örnekte, pyDes kütüphanesinin kullanımı gösterilmiştir.
-    # Ancak, güvenli bir uygulama geliştirmek için daha güçlü bir şifreleme algoritması tercih edilmelidir.
-    # Key'iniz güvenli bir şekilde saklanmalı ve kullanılmalıdır.
     des = des(str(key).encode(), ECB, pad=None, padmode=PAD_PKCS5)
     return des.encrypt(message)
 
