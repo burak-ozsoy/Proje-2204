@@ -2,8 +2,9 @@ import socket
 import json
 import time
 from datetime import datetime, timedelta
-from threading import Thread
 from pyDes import *
+from cryptography.fernet import Fernet
+
 
 HOSTNAME = socket.gethostname()
 BROADCAST_IP = socket.gethostbyname(HOSTNAME)
@@ -20,7 +21,7 @@ def display_available_users():
         discovered_peers = json.load(fp)
         print("Available Users:")
         for ip, peer_data in discovered_peers.items():
-            last_broadcast_time = datetime.fromtimestamp(peer_data['timestamp']) # çevirmemiz gerekebilir!
+            last_broadcast_time = datetime.fromtimestamp(peer_data['timestamp'])
             time_difference = current_time - last_broadcast_time
             if time_difference <= timedelta(minutes=15):
                 username = peer_data['username']
@@ -36,24 +37,44 @@ def initiate_secure_chat(target_username):
         your_key = (g ** your_random_number) % p
         
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                s.connect((BROADCAST_IP, 6001))
-                s.sendall(json.dumps({'key': your_key}).encode())
-                data = s.recv(1024)
-                their_key = json.loads(data.decode())['key']
-                shared_key = (their_key ** your_random_number) % p
-                print("Shared Key:", shared_key)
-                # Now, proceed with encrypted chat
-                message = input("Enter your message: ")
-                s.sendall(json.dumps({'encrypted_message': message}).encode())
-                print("Message sent successfully.")
-                log_message("SENT (secure)", target_username, message)
-    except KeyError:
-        print(f"{target_username} is not available.")
+            with open(PEER_DATA_FILE, 'r') as fp:
+                discovered_peers = json.load(fp)
+                target_ip = next((ip for ip, peer_data in discovered_peers.items() if peer_data['username'] == target_username), None)
+                if target_ip:
+                    s.connect((target_ip, 6001))
+                    s.sendall(json.dumps({'key': your_key}).encode())
+                    data = s.recv(1024)
+                    their_key = json.loads(data.decode())['key']
+                    shared_key = (their_key ** your_random_number) % p
+                    print("Shared Key:", shared_key)
+                while True:
+                    message = input("Enter your message: ")
+                    encrypted_message = encrypt_message(message, shared_key)
+                    s.sendall(json.dumps({'encrypted_message': encrypted_message}).encode())
+                    print("Message sent successfully.")
+                    log_message("SENT (secure)", target_username, message)
+                else:
+                    print(f"{target_username} is not available.")
     except ConnectionRefusedError:
         print(f"Failed to connect to {target_username}.")
     except Exception as e:
         print(f"An error occurred: {e}")               
 
+def encrypt_message(message, key):
+    encrypted_message = ""
+    for char in message:
+        if char.isalpha():  # Encrypt only alphabetic characters
+            shifted = ord(char) + key
+            if char.islower():
+                if shifted > ord('z'):
+                    shifted -= 26
+            elif char.isupper():
+                if shifted > ord('Z'):
+                    shifted -= 26
+            encrypted_message += chr(shifted)
+        else:
+            encrypted_message += char
+    return encrypted_message
 
 def chat_with_user(username):
     print(f"Initiating chat with {username}...")
