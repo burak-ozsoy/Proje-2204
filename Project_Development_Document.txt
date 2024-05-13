@@ -1,0 +1,23 @@
+- Development Platform and Group Collaboration -
+
+Platform Used:
+
+The code for the networked peer-to-peer chat application was developed primarily on a Windows platform using Python 3.x.
+
+Challenges Faced:
+
+Networking Setup: Configuring the network settings for local area network communication posed initial challenges, especially in handling broadcast messages.
+Encryption Implementation: Implementing secure communication with encryption using the Diffie-Hellman key exchange algorithm required understanding cryptographic concepts and libraries.
+Thread Synchronization: Coordinating multiple threads for peer discovery, chat initiation, and response required careful synchronization to avoid race conditions.
+
+Group Members and Workload Division:
+
+
+
+Collaboration:
+
+Communication: Regular meetings were held to discuss progress, share insights, and resolve any issues encountered during development.
+Code Review: Each team member reviewed and provided feedback on the code written by others to ensure consistency and quality.
+Testing: Comprehensive testing was conducted by each member individually and then collectively to ensure the application's functionality and stability.
+
+Overall, the collaborative efforts of the team facilitated the successful development of the networked peer-to-peer chat application, overcoming challenges and dividing workload efficiently.
